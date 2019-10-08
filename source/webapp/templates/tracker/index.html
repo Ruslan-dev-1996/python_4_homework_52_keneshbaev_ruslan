@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block menu %}
+       <li><a href="{% url 'tracker_add' %}">Add</a></li>
+       <li><a href="{% url 'status_view'  %}">Status</a></li>
+       <li><a href="{% url 'type_view' %}">Type</a></li>
+
+{% endblock %}
+
+{% block content %}
+    <h1>Tracker:</h1>
+    <hr/>
+    {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}
+    {% for tracker in trackers %}
+        <h2>{{ tracker.summary }}</h2>
+        <p>{{ tracker.summary }} {{ tracker.status|default_if_none:'Без категории' }}
+            создана {{ tracker.created_at|date:'d.m.Y H:i:s' }}</p>
+        <p>
+            <a href="{% url 'tracker_view' tracker.pk %}">More</a>
+            <a href="{% url 'tracker_update' tracker.pk %}">Refresh</a>
+            <a href="{% url "tracker_delete" tracker.pk %}">Delete</a>
+        </p>
+        <hr/>
+    {% endfor %}
+{#    {% if is_paginated %}#}
+{#        {% include 'partial/pagination.html' %}#}
+{#    {% endif %}#}
+{% endblock %}

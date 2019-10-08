@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Status{% endblock %}
+
+{% block menu %}
+    <li><a href="{% url 'status_view'  %}">Status</a></li>
+{% endblock %}
+
+{% block content %}
+    <h1>Create Status</h1>
+    <form method="POST" action="{% url 'status_add' %}">
+        {% include 'partial/tracker_form.html' with button_text="Create" %}
+    </form>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

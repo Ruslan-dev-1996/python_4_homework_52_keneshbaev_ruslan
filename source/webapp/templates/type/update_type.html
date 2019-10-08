@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Refresh Type{% endblock %}
+
+{% block menu %}
+    <li><a href="{% url 'type_view'%}">Type</a></li>
+{% endblock %}
+
+{% block content %}
+    <h1>Refresh Type</h1>
+    <form method="POST" action="{% url 'type_update' type.pk %}">
+        {% include 'partial/tracker_form.html' with button_text="Update" %}
+    </form>
+{% endblock %}

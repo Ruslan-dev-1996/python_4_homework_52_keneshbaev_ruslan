@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}type{% endblock %}
+
+
+{% block menu %}
+    <li><a href="{% url 'type_add' %}">Add Type</a></li>
+{% endblock %}
+
+{% block content %}
+    <h1>Type</h1>
+    <hr/>
+    {% for type in types %}
+        <h2>{{ type.name }}</h2>
+        <li><a href="{% url 'type_delete' type.pk %}">Delete</a></li>
+        <li><a href="{% url 'type_update' type.pk %}">Refresh</a></li>
+        <hr/>
+    {% endfor %}
+{% endblock 

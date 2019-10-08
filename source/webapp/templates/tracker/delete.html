@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Task{% endblock %}
+
+{% block menu %}
+    <li><a href="{% url 'tracker_view' issue.pk %}">More</a></li>
+{% endblock %}
+
+{% block content %}
+    <h1>Are you sure you want to delete "{{ issue }}"?</h1>
+    <form method="POST" action="{% url 'tracker_delete' issue.pk %}" class="text-center">
+        {% csrf_token %}
+        <p><input type="submit" value="Confirm"></p>
+        <p><a href="{% url 'tracker_view' issue.pk %}">Cancel</a></p>
+    </form>
+{% endblock %}
