@@ -3,10 +3,11 @@ from django.urls import reverse
 
 from webapp.forms import TrackerForm
 from webapp.models import Tracker
-from django.views import View
+
 from django.views.generic import ListView, CreateView, UpdateView
 
 from webapp.views.base_detailed import DetailView
+from webapp.views.base_views import DeleteView
 
 
 class IndexView(ListView):
@@ -32,6 +33,7 @@ class TrackerCreateView(CreateView):
     template_name = 'tracker/create.html'
     model = Tracker
     fields = ['summary', 'description', 'status', 'type']
+
     def get_success_url(self):
         return reverse('tracker_view', kwargs={'pk': self.object.pk})
 
@@ -39,43 +41,21 @@ class TrackerCreateView(CreateView):
 
 
 
+class TrackerUpdateView(UpdateView):
+    model = Tracker
+    template_name = 'tracker/update.html'
+    form_class = TrackerForm
+    context_object_name = 'issue'
+
+    def get_redirect_url(self):
+        return reverse('tracker_view', kwargs={'pk': self.object.pk})
 
 
- class TrackerUpdateView(UpdateView):
+class TrackerDeleteView(DeleteView):
+    model = Tracker
+    template_name = 'tracker/delete.html'
+    context_object_name = 'issue'
 
-
-    def get(self, request, *args, **kwargs):
-        issue = get_object_or_404(Tracker, pk=kwargs.get('pk'))
-        form = TrackerForm(data={
-            'summary': issue.summary,
-            'description': issue.description,
-            'status': issue.status_id,
-            'type': issue.type_id
-        })
-        return render(request, 'tracker/update.html', context={'form': form, 'issue': issue})
-
-    def post(self, request, *args, **kwargs):
-        issue = get_object_or_404(Tracker, pk=kwargs.get('pk'))
-        form = TrackerForm(data=request.POST)
-        if form.is_valid():
-            issue.summary = form.cleaned_data['summary']
-            issue.description = form.cleaned_data['description']
-            issue.status = form.cleaned_data['status']
-            issue.type = form.cleaned_data['type']
-            issue.save()
-            return redirect('tracker_view', pk=issue.pk)
-        else:
-            return render(request, 'tracker/update.html', context={'form': form, 'issue': issue})
-
-
-
-class TrackerDeleteView(View):
-    def get(self, request, *args, **kwargs):
-        issue = get_object_or_404(Tracker, pk=kwargs['pk'])
-        return render(request, 'tracker/delete.html', context={'issue': issue})
-
-    def post(self, request, *args, **kwargs):
-         issue = get_object_or_404(Tracker, pk=kwargs['pk'])
-         issue.delete()
-         return redirect('index')
+    def get_redirect_url(self):
+        return reverse('index')
 
